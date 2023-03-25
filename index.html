@@ -41,6 +41,10 @@
       var brickOffsetTop = 30;
       var brickOffsetLeft = 30;
 
+      //점수 및 생명
+      var score = 0;
+      var lives = 3;
+
       //벽돌 위치 설정
       var bricks = [];
       for (let i = 0; i < brickColumnCount; i++) {
@@ -87,6 +91,12 @@
               ) {
                 dy = -dy;
                 b.check = 0;
+                score++;
+                if(score === brickRowCount * brickColumnCount) {
+                  alert("축하합니다! 게임에서 승리했습니다!");
+                  document.location.reload();
+                  clearInterval(interval);
+                }
               }
             }
           }
@@ -134,12 +144,28 @@
           }
         }
       }
+      
+      //점수 그리기
+      function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#8639EB";
+        ctx.fillText(`점수 : ${score}`, 8 , 20);
+      }
+
+      //생명 그리기
+      function drawLives() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#8639EB";
+        ctx.fillText(`생명 : ${lives}`, canvas.width - 65, 20);
+      }
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBall();
         drawPaddle();
         drawBricks();
+        drawScore();
+        drawLives();
         collisionDetection();
 
         if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
@@ -151,28 +177,30 @@
           if (x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
           } else {
-            alert("게임 종료");
-            document.location.reload();
-            clearInterval(interval);
+            lives--;
+            if(!lives) {
+              alert("게임 종료...");
+              document.location.reload();
+            } else {
+              x = canvas.width / 2;
+              y = canvas.height - 30;
+              dx = 3;
+              dy = -3;
+              paddleX = (canvas.width - paddleWidth) / 2;
+            }
           }
         }
-        if (rightPressed) {
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
           paddleX += 7;
-          if (paddleX + paddleWidth > canvas.width) {
-            paddleX = canvas.width - paddleWidth;
-          }
-        } else if (leftPressed) {
+        } else if (leftPressed && paddleX > 0) {
           paddleX -= 7;
-          if (paddleX < 0) {
-            paddleX = 0;
-          }
         }
 
         x += dx;
         y += dy;
+        requestAnimationFrame(draw);
       }
-
-      var interval = setInterval(draw, 10);
+      draw();
     </script>
   </body>
 </html>
