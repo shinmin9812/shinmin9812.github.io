@@ -19,13 +19,10 @@
     <script>
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d"); //캔버스 안에 그림을 그릴 도구
-      var rand_width = Math.floor(Math.random() * 5) + 1;
 
-      var img1 = new Image();
       var img2 = new Image();
       var img3 = new Image();
 
-      img1.src = "rabbit.png";
       img2.src = "js.jpg";
       img3.src = "node.png";
 
@@ -101,7 +98,7 @@
                 dy = -dy;
                 b.check = 0;
                 score++;
-                if(score === 16) {
+                if (score === 16) {
                   alert("축하합니다! 게임에서 승리했습니다!");
                   document.location.reload();
                   clearInterval(interval);
@@ -128,11 +125,16 @@
 
       //공 그리기
       function drawBall() {
-        ctx.beginPath();
+        /*ctx.beginPath();
         ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
         ctx.fillStyle = "#8639EB";
         ctx.fill();
-        ctx.closePath();
+        ctx.closePath();*/
+        var img1 = new Image();
+        img1.src = "./images/rabbit.png";
+        img1.addEventListener("load", () => {
+          ctx.drawImage(img1, x, y, 10, 10, dx, dy, 10, 10);
+        });
       }
 
       //벽돌 그리기
@@ -140,9 +142,17 @@
         for (let i = 0; i < brickColumnCount; i++) {
           for (let j = 0; j < brickRowCount; j++) {
             if (bricks[i][j].check === 1) {
-              if((i === 0 && j === 0) || (i === 2 && j === 0) || (i === 4 && j === 0) || 
-              (i === 0 && j === 3) || (i === 3 && j === 4) || (i === 0 && j === 4) || 
-              (i === 1 && j === 4) || (i === 4 && j === 3) || (i === 4 && j === 4)) {
+              if (
+                (i === 0 && j === 0) ||
+                (i === 2 && j === 0) ||
+                (i === 4 && j === 0) ||
+                (i === 0 && j === 3) ||
+                (i === 3 && j === 4) ||
+                (i === 0 && j === 4) ||
+                (i === 1 && j === 4) ||
+                (i === 4 && j === 3) ||
+                (i === 4 && j === 4)
+              ) {
                 continue;
               }
               var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
@@ -158,12 +168,12 @@
           }
         }
       }
-      
+
       //점수 그리기
       function drawScore() {
         ctx.font = "16px Arial";
         ctx.fillStyle = "#8639EB";
-        ctx.fillText(`점수 : ${score}`, 8 , 20);
+        ctx.fillText(`점수 : ${score}`, 8, 20);
       }
 
       //생명 그리기
@@ -192,7 +202,7 @@
             dy = -dy;
           } else {
             lives--;
-            if(!lives) {
+            if (!lives) {
               alert("게임 종료...");
               document.location.reload();
             } else {
