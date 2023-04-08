@@ -1,11 +1,13 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d"); //캔버스 안에 그림을 그릴 도구
 
-var img2 = new Image();
-var img3 = new Image();
+var rabbitImage = new Image();
+var jsImage = new Image();
+var nodeImage = new Image();
 
-img2.src = "js.jpg";
-img3.src = "node.png";
+rabbitImage.src = "./images/rabbit.png";
+jsImage.src = "./images/js.png";
+nodeImage.src = "./images/node.png";
 
 //공 좌표
 var ballRadius = 10;
@@ -106,16 +108,12 @@ function drawPaddle() {
 
 //공 그리기
 function drawBall() {
-  /*ctx.beginPath();
+  ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
   ctx.fillStyle = "#8639EB";
   ctx.fill();
-  ctx.closePath();*/
-  var img1 = new Image();
-  img1.src = "./images/rabbit.png";
-  img1.addEventListener("load", () => {
-    ctx.drawImage(img1, x, y, 10, 10, dx, dy, 10, 10);
-  });
+  ctx.closePath();
+  //ctx.drawImage(rabbitImage, x, y, ballRadius * 2, ballRadius * 2);
 }
 
 //벽돌 그리기
@@ -145,6 +143,7 @@ function drawBricks() {
         ctx.fillStyle = "#8639EB";
         ctx.fill();
         ctx.closePath();
+        //ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
       }
     }
   }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Moving Image Example</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="myCanvas" width="400" height="400"></canvas>
+
+	<script>
+		var canvas = document.getElementById("myCanvas");
+		var ctx = canvas.getContext("2d");
+
+		// Load image
+		var ball = new Image();
+		ball.src = "./images/rabbit.png";
+
+		// Set initial position
+		var x = canvas.width/2;
+		var y = canvas.height/2;
+
+		// Set speed
+		var dx = 2;
+		var dy = -2;
+
+		// Draw ball
+		function drawBall() {
+			ctx.drawImage(ball, x, y, 50, 50);
+		}
+
+		// Move ball
+		function moveBall() {
+			// Clear canvas
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			// Draw ball
+			drawBall();
+
+			// Move ball
+			x += dx;
+			y += dy;
+
+			// Bounce ball off walls
+			if (x + dx > canvas.width-50 || x + dx < 0) {
+				dx = -dx;
+			}
+			if (y + dy > canvas.height-50 || y + dy < 0) {
+				dy = -dy;
+			}
+		}
+
+		// Update canvas every 10 milliseconds
+		setInterval(moveBall, 10);
+	</script>
+</body>
+</html>
