@@ -156,11 +156,6 @@ function drawBricks() {
           var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
           bricks[i][j].x = brickX;
           bricks[i][j].y = brickY;
-          //ctx.beginPath();
-          //ctx.rect(brickX, brickY, brickWidth, brickHeight);
-          //ctx.fillStyle = "#8639EB";
-          //ctx.fill();
-          //ctx.closePath();
           ctx.drawImage(nodeImage, brickX, brickY, brickWidth, brickHeight);
         }
       }
