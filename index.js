@@ -9,6 +9,9 @@ rabbitImage.src = "./images/rabbit.png";
 jsImage.src = "./images/js.png";
 nodeImage.src = "./images/node.png";
 
+// 맵 랜덤 값
+var rand = Math.floor(Math.random());
+
 //공 좌표
 var ballRadius = 10;
 var x = canvas.width / 2;
@@ -81,6 +84,31 @@ function collisionDetection() {
           dy = -dy;
           b.check = 0;
           score++;
+          if (score === brickColumnCount * brickRowCount) {
+            alert("축하합니다! 게임에서 승리했습니다!");
+            document.location.reload();
+            clearInterval(interval);
+          }
+        }
+      }
+    }
+  }
+}
+
+function collisionDetection_heart() {
+  for (let i = 0; i < brickColumnCount; i++) {
+    for (let j = 0; j < brickRowCount; j++) {
+      var b = bricks[i][j];
+      if (b.check === 1) {
+        if (
+          x > b.x &&
+          x < b.x + brickWidth &&
+          y > b.y &&
+          y < b.y + brickHeight
+        ) {
+          dy = -dy;
+          b.check = 0;
+          score++;
           if (score === 16) {
             alert("축하합니다! 게임에서 승리했습니다!");
             document.location.reload();
@@ -108,16 +136,35 @@ function drawPaddle() {
 
 //공 그리기
 function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = "#8639EB";
-  ctx.fill();
-  ctx.closePath();
-  //ctx.drawImage(rabbitImage, x, y, ballRadius * 2, ballRadius * 2);
+  //ctx.beginPath();
+  //ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+  //ctx.fillStyle = "#8639EB";
+  //ctx.fill();
+  //ctx.closePath();
+  ctx.drawImage(rabbitImage, x, y, ballRadius * 2, ballRadius * 2);
 }
 
 //벽돌 그리기
 function drawBricks() {
+  for (let i = 0; i < brickColumnCount; i++) {
+    for (let j = 0; j < brickRowCount; j++) {
+      if (bricks[i][j].check === 1) {
+        var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
+        var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
+        bricks[i][j].x = brickX;
+        bricks[i][j].y = brickY;
+        //ctx.beginPath();
+        //ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        //ctx.fillStyle = "#8639EB";
+        //ctx.fill();
+        //ctx.closePath();
+        ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
+      }
+    }
+  }
+}
+
+function drawBricks_heart() {
   for (let i = 0; i < brickColumnCount; i++) {
     for (let j = 0; j < brickRowCount; j++) {
       if (bricks[i][j].check === 1) {
@@ -138,12 +185,12 @@ function drawBricks() {
         var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
         bricks[i][j].x = brickX;
         bricks[i][j].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = "#8639EB";
-        ctx.fill();
-        ctx.closePath();
-        //ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
+        //ctx.beginPath();
+        //ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        //ctx.fillStyle = "#8639EB";
+        //ctx.fill();
+        //ctx.closePath();
+        ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
       }
     }
   }
@@ -164,13 +211,20 @@ function drawLives() {
 }
 
 function draw() {
+  console.log(rand);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
   drawPaddle();
-  drawBricks();
   drawScore();
   drawLives();
-  collisionDetection();
+
+  if(rand === 0) {
+    drawBricks();
+    collisionDetection();
+  } else if (rand === 1) {
+    drawBricks_heart();
+    collisionDetection_heart();
+  }
 
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
