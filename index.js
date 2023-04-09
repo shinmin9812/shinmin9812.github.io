@@ -10,7 +10,7 @@ jsImage.src = "./images/js.png";
 nodeImage.src = "./images/node.png";
 
 // 맵 랜덤 값
-var rand = Math.floor(Math.random());
+var rand = Math.round(Math.random());
 
 //공 좌표
 var ballRadius = 10;
@@ -84,35 +84,18 @@ function collisionDetection() {
           dy = -dy;
           b.check = 0;
           score++;
-          if (score === brickColumnCount * brickRowCount) {
-            alert("축하합니다! 게임에서 승리했습니다!");
-            document.location.reload();
-            clearInterval(interval);
-          }
-        }
-      }
-    }
-  }
-}
-
-function collisionDetection_heart() {
-  for (let i = 0; i < brickColumnCount; i++) {
-    for (let j = 0; j < brickRowCount; j++) {
-      var b = bricks[i][j];
-      if (b.check === 1) {
-        if (
-          x > b.x &&
-          x < b.x + brickWidth &&
-          y > b.y &&
-          y < b.y + brickHeight
-        ) {
-          dy = -dy;
-          b.check = 0;
-          score++;
-          if (score === 16) {
-            alert("축하합니다! 게임에서 승리했습니다!");
-            document.location.reload();
-            clearInterval(interval);
+          if (rand === 0) {
+            if (score === brickColumnCount * brickRowCount) {
+              alert("축하합니다! 게임에서 승리했습니다!");
+              document.location.reload();
+              clearInterval(interval);
+            }
+          } else if (rand === 1) {
+            if (score === 16) {
+              alert("축하합니다! 게임에서 승리했습니다!");
+              document.location.reload();
+              clearInterval(interval);
+            }
           }
         }
       }
@@ -123,12 +106,7 @@ function collisionDetection_heart() {
 //하단 바 그리기
 function drawPaddle() {
   ctx.beginPath();
-  ctx.rect(
-    paddleX,
-    canvas.height - paddleHeight,
-    paddleWidth,
-    paddleHeight
-  );
+  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
   ctx.fillStyle = "#8639EB";
   ctx.fill();
   ctx.closePath();
@@ -149,48 +127,42 @@ function drawBricks() {
   for (let i = 0; i < brickColumnCount; i++) {
     for (let j = 0; j < brickRowCount; j++) {
       if (bricks[i][j].check === 1) {
-        var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
-        var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
-        bricks[i][j].x = brickX;
-        bricks[i][j].y = brickY;
-        //ctx.beginPath();
-        //ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        //ctx.fillStyle = "#8639EB";
-        //ctx.fill();
-        //ctx.closePath();
-        ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
-      }
-    }
-  }
-}
-
-function drawBricks_heart() {
-  for (let i = 0; i < brickColumnCount; i++) {
-    for (let j = 0; j < brickRowCount; j++) {
-      if (bricks[i][j].check === 1) {
-        if (
-          (i === 0 && j === 0) ||
-          (i === 2 && j === 0) ||
-          (i === 4 && j === 0) ||
-          (i === 0 && j === 3) ||
-          (i === 3 && j === 4) ||
-          (i === 0 && j === 4) ||
-          (i === 1 && j === 4) ||
-          (i === 4 && j === 3) ||
-          (i === 4 && j === 4)
-        ) {
-          continue;
+        if (rand === 0) {
+          var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
+          var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
+          bricks[i][j].x = brickX;
+          bricks[i][j].y = brickY;
+          //ctx.beginPath();
+          //ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          //ctx.fillStyle = "#8639EB";
+          //ctx.fill();
+          //ctx.closePath();
+          ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
+        } else if (rand === 1) {
+          if (
+            (i === 0 && j === 0) ||
+            (i === 2 && j === 0) ||
+            (i === 4 && j === 0) ||
+            (i === 0 && j === 3) ||
+            (i === 3 && j === 4) ||
+            (i === 0 && j === 4) ||
+            (i === 1 && j === 4) ||
+            (i === 4 && j === 3) ||
+            (i === 4 && j === 4)
+          ) {
+            continue;
+          }
+          var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
+          var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
+          bricks[i][j].x = brickX;
+          bricks[i][j].y = brickY;
+          //ctx.beginPath();
+          //ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          //ctx.fillStyle = "#8639EB";
+          //ctx.fill();
+          //ctx.closePath();
+          ctx.drawImage(nodeImage, brickX, brickY, brickWidth, brickHeight);
         }
-        var brickX = i * (brickWidth + brickPadding) + brickOffsetLeft;
-        var brickY = j * (brickHeight + brickPadding) + brickOffsetTop;
-        bricks[i][j].x = brickX;
-        bricks[i][j].y = brickY;
-        //ctx.beginPath();
-        //ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        //ctx.fillStyle = "#8639EB";
-        //ctx.fill();
-        //ctx.closePath();
-        ctx.drawImage(jsImage, brickX, brickY, brickWidth, brickHeight);
       }
     }
   }
@@ -217,14 +189,8 @@ function draw() {
   drawPaddle();
   drawScore();
   drawLives();
-
-  if(rand === 0) {
-    drawBricks();
-    collisionDetection();
-  } else if (rand === 1) {
-    drawBricks_heart();
-    collisionDetection_heart();
-  }
+  drawBricks();
+  collisionDetection();
 
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
