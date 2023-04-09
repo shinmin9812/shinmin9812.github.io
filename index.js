@@ -178,7 +178,6 @@ function drawLives() {
 }
 
 function draw() {
-  console.log(rand);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBall();
   drawPaddle();
